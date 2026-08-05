@@ -1,0 +1,228 @@
+{% extends "RootLine/base.html" %}
+
+{% block title %}
+{{ product.title }} | RootLine
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container product-detail-layout">
+
+        <div class="product-gallery">
+
+            <img
+                src="{{ product.image_1.url }}"
+                alt="{{ product.title }}"
+                class="main-product-image"
+            >
+
+            <div class="small-image-grid">
+
+                {% if product.image_2 %}
+                    <img
+                        src="{{ product.image_2.url }}"
+                        alt="{{ product.title }}"
+                    >
+                {% endif %}
+
+                {% if product.image_3 %}
+                    <img
+                        src="{{ product.image_3.url }}"
+                        alt="{{ product.title }}"
+                    >
+                {% endif %}
+
+            </div>
+
+            {% if product.video %}
+
+                <video class="product-video" controls>
+                    <source src="{{ product.video.url }}">
+                    Your browser does not support video.
+                </video>
+
+            {% endif %}
+
+        </div>
+
+        <div class="product-information">
+
+            <div class="product-top-row">
+                <span class="category-badge">
+                    {{ product.category.name }}
+                </span>
+
+                <span class="sale-badge">
+                    {{ product.get_sale_type_display }}
+                </span>
+            </div>
+
+            <h1>{{ product.title }}</h1>
+
+            {% if product.caption %}
+                <p class="large-caption">
+                    {{ product.caption }}
+                </p>
+            {% endif %}
+
+            <p class="product-description">
+                {{ product.description }}
+            </p>
+
+            <div class="seller-box">
+                <strong>Seller</strong>
+
+                <span>
+                    {% if product.seller.profile.shop_name %}
+                        {{ product.seller.profile.shop_name }}
+                    {% else %}
+                        {{ product.seller.username }}
+                    {% endif %}
+                </span>
+            </div>
+
+            {% if product.sale_type == "fixed" %}
+
+                <div class="purchase-box">
+                    <span>Direct price</span>
+
+                    <strong>
+                        ৳{{ product.price }}
+                    </strong>
+
+                    <p>
+                        Available stock: {{ product.stock }}
+                    </p>
+
+                    {% if user.is_authenticated %}
+
+                        {% if user != product.seller %}
+                            <form
+                                method="post"
+                                action="{% url 'buy_now' product.id %}"
+                            >
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="primary-button full-button"
+                                >
+                                    Buy Now
+                                </button>
+                            </form>
+                        {% else %}
+                            <p class="notice">
+                                This is your product.
+                            </p>
+                        {% endif %}
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'login' %}?next={{ request.path }}"
+                            class="primary-button full-button"
+                        >
+                            Login to Buy
+                        </a>
+
+                    {% endif %}
+                </div>
+
+            {% else %}
+
+                <div class="purchase-box">
+
+                    <span>Current highest bid</span>
+
+                    <strong>
+                        ৳{{ product.current_bid }}
+                    </strong>
+
+                    <p>
+                        Minimum next bid:
+                        ৳{{ product.minimum_next_bid }}
+                    </p>
+
+                    <p>
+                        Auction ends:
+                        {{ product.auction_end|date:"d M Y, h:i A" }}
+                    </p>
+
+                    {% if product.auction_is_open %}
+
+                        {% if user.is_authenticated %}
+
+                            {% if user != product.seller %}
+
+                                <form
+                                    method="post"
+                                    action="{% url 'place_bid' product.id %}"
+                                    class="bid-form"
+                                >
+                                    {% csrf_token %}
+
+                                    {{ bid_form.amount }}
+
+                                    <button
+                                        type="submit"
+                                        class="primary-button"
+                                    >
+                                        Place Bid
+                                    </button>
+                                </form>
+
+                            {% else %}
+
+                                <p class="notice">
+                                    You cannot bid on your own product.
+                                </p>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <a
+                                href="{% url 'login' %}?next={{ request.path }}"
+                                class="primary-button full-button"
+                            >
+                                Login to Bid
+                            </a>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <p class="notice">
+                            This auction has ended.
+                        </p>
+
+                    {% endif %}
+                </div>
+
+                <div class="bid-history">
+                    <h3>Recent Bids</h3>
+
+                    {% for bid in bids %}
+                        <div class="bid-row">
+                            <span>
+                                {{ bid.bidder.username|slice:":2" }}***
+                            </span>
+
+                            <strong>
+                                ৳{{ bid.amount }}
+                            </strong>
+                        </div>
+                    {% empty %}
+                        <p>No bids have been placed yet.</p>
+                    {% endfor %}
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

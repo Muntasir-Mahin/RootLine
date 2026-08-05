@@ -1,0 +1,43 @@
+{% extends "RootLine/base.html" %}
+
+{% block title %}
+Become a Seller | RootLine
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+        <div class="form-card">
+            <span class="eyebrow">Seller application</span>
+
+            <h1>Start Selling on RootLine</h1>
+
+            {% if profile.seller_requested %}
+
+                <div class="notice">
+                    Your seller request is waiting for admin approval.
+                    You may update the information below.
+                </div>
+
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button
+                    type="submit"
+                    class="primary-button full-button"
+                >
+                    Submit Seller Request
+                </button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

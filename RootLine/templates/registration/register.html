@@ -1,0 +1,47 @@
+{% extends "RootLine/base.html" %}
+
+{% block title %}
+Create RootLine Account
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+        <div class="form-card">
+            <span class="eyebrow">Join RootLine</span>
+
+            <h1>Create Your Account</h1>
+
+            <p>
+                Every account can purchase products.
+                You can request seller access afterward.
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button
+                    type="submit"
+                    class="primary-button full-button"
+                >
+                    Create Account
+                </button>
+            </form>
+
+            <p class="form-footer">
+                Already registered?
+
+                <a href="{% url 'login' %}">
+                    Login here
+                </a>
+            </p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

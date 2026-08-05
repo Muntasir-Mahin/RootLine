@@ -1,0 +1,123 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}RootLine{% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'RootLine/css/style.css' %}"
+    >
+</head>
+
+<body>
+
+<header class="main-header">
+    <div class="container nav-container">
+
+        <a href="{% url 'home' %}" class="brand">
+            <span class="brand-icon">R</span>
+
+            <span>
+                RootLine
+                <small>From the source, straight to you</small>
+            </span>
+        </a>
+
+        <nav class="navigation">
+            <a href="{% url 'home' %}">Marketplace</a>
+
+            {% if user.is_authenticated %}
+
+                <a href="{% url 'buyer_dashboard' %}">
+                    Buyer Panel
+                </a>
+
+                {% if user.profile.seller_approved %}
+                    <a href="{% url 'seller_dashboard' %}">
+                        Seller Panel
+                    </a>
+                {% else %}
+                    <a href="{% url 'seller_request' %}">
+                        Become a Seller
+                    </a>
+                {% endif %}
+
+                {% if user.is_staff %}
+                    <a href="/admin/">
+                        Admin Panel
+                    </a>
+                {% endif %}
+
+                <form
+                    method="post"
+                    action="{% url 'logout' %}"
+                    class="logout-form"
+                >
+                    {% csrf_token %}
+
+                    <button type="submit" class="nav-button">
+                        Logout
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'login' %}">
+                    Login
+                </a>
+
+                <a href="{% url 'register' %}" class="nav-register">
+                    Create Account
+                </a>
+
+            {% endif %}
+        </nav>
+
+    </div>
+</header>
+
+{% if messages %}
+    <div class="container messages-container">
+
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+    </div>
+{% endif %}
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer class="main-footer">
+    <div class="container footer-content">
+
+        <div>
+            <h3>RootLine</h3>
+            <p>Buy directly. Sell naturally. Grow together.</p>
+        </div>
+
+        <p>
+            &copy; 2026 RootLine. All rights reserved.
+        </p>
+
+    </div>
+</footer>
+
+</body>
+</html>

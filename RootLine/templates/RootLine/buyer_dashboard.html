@@ -1,0 +1,142 @@
+{% extends "RootLine/base.html" %}
+
+{% block title %}
+Buyer Panel | RootLine
+{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-header">
+    <div class="container">
+
+        <span class="eyebrow">Buyer panel</span>
+
+        <h1>Hello, {{ user.first_name|default:user.username }}</h1>
+
+        <p>
+            Manage your orders, bids and seller account.
+        </p>
+
+        {% if not profile.seller_approved %}
+
+            <a
+                href="{% url 'seller_request' %}"
+                class="primary-button"
+            >
+                Become a Seller
+            </a>
+
+        {% else %}
+
+            <a
+                href="{% url 'seller_dashboard' %}"
+                class="primary-button"
+            >
+                Open Seller Panel
+            </a>
+
+        {% endif %}
+
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container dashboard-grid">
+
+        <div class="dashboard-card">
+            <h2>My Orders</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for order in orders %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'product_detail' order.product.id %}">
+                                        {{ order.product.title }}
+                                    </a>
+                                </td>
+
+                                <td>
+                                    ৳{{ order.total_price }}
+                                </td>
+
+                                <td>
+                                    {{ order.get_status_display }}
+                                </td>
+
+                                <td>
+                                    {{ order.created_at|date:"d M Y" }}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">
+                                    You have not purchased anything yet.
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <h2>My Bids</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Your Bid</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for bid in bids %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'product_detail' bid.product.id %}">
+                                        {{ bid.product.title }}
+                                    </a>
+                                </td>
+
+                                <td>
+                                    ৳{{ bid.amount }}
+                                </td>
+
+                                <td>
+                                    {{ bid.created_at|date:"d M Y" }}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">
+                                    You have not placed any bids.
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

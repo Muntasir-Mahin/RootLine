@@ -1,0 +1,50 @@
+{% extends "RootLine/base.html" %}
+
+{% block title %}
+List Product | RootLine
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+        <div class="form-card wide-form-card">
+
+            <span class="eyebrow">Seller panel</span>
+
+            <h1>List a New Product</h1>
+
+            <div class="form-help">
+                <p>
+                    For a direct-price product, enter the price and stock.
+                </p>
+
+                <p>
+                    For a bidding product, enter the starting bid,
+                    minimum increment and auction ending time.
+                </p>
+            </div>
+
+            <form
+                method="post"
+                enctype="multipart/form-data"
+            >
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button
+                    type="submit"
+                    class="primary-button full-button"
+                >
+                    Publish Product
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

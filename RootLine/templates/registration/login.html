@@ -1,0 +1,50 @@
+{% extends "RootLine/base.html" %}
+
+{% block title %}
+Login | RootLine
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+        <div class="form-card">
+            <span class="eyebrow">Welcome back</span>
+
+            <h1>Login to RootLine</h1>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                {% if next %}
+                    <input
+                        type="hidden"
+                        name="next"
+                        value="{{ next }}"
+                    >
+                {% endif %}
+
+                <button
+                    type="submit"
+                    class="primary-button full-button"
+                >
+                    Login
+                </button>
+            </form>
+
+            <p class="form-footer">
+                Do not have an account?
+
+                <a href="{% url 'register' %}">
+                    Register here
+                </a>
+            </p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "RootLine/base.html" %}
+
+{% block title %}
+Seller Panel | RootLine
+{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-header">
+    <div class="container dashboard-heading-row">
+
+        <div>
+            <span class="eyebrow">Seller panel</span>
+
+            <h1>
+                {{ profile.shop_name|default:user.username }}
+            </h1>
+
+            <p>
+                Manage your products and customer orders.
+            </p>
+        </div>
+
+        <a
+            href="{% url 'product_create' %}"
+            class="primary-button"
+        >
+            Add New Product
+        </a>
+
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container dashboard-grid">
+
+        <div class="dashboard-card">
+            <h2>My Products</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Type</th>
+                            <th>Price/Bid</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for product in products %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'product_detail' product.id %}">
+                                        {{ product.title }}
+                                    </a>
+                                </td>
+
+                                <td>
+                                    {{ product.get_sale_type_display }}
+                                </td>
+
+                                <td>
+                                    {% if product.sale_type == "fixed" %}
+                                        ৳{{ product.price }}
+                                    {% else %}
+                                        ৳{{ product.current_bid }}
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ product.stock }}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">
+                                    You have not listed any products.
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <h2>Customer Orders</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Buyer</th>
+                            <th>Status</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for order in received_orders %}
+                            <tr>
+                                <td>{{ order.product.title }}</td>
+                                <td>{{ order.buyer.username }}</td>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>৳{{ order.total_price }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">
+                                    No customers have ordered yet.
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

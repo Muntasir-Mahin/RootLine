@@ -1,0 +1,137 @@
+{% extends "RootLine/base.html" %}
+
+{% block title %}
+RootLine Marketplace
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="container hero-content">
+
+        <div class="hero-text">
+            <span class="eyebrow">
+                Natural marketplace
+            </span>
+
+            <h1>
+                Products directly from their source.
+            </h1>
+
+            <p>
+                Discover products from trusted sellers.
+                Purchase directly or participate in live bidding.
+            </p>
+
+            <a href="#products" class="primary-button">
+                Explore Products
+            </a>
+        </div>
+
+        <div class="hero-card">
+            <div class="hero-leaf">🌿</div>
+
+            <h2>Buy. Sell. Bid.</h2>
+
+            <p>
+                One marketplace account gives you access to
+                buying, selling and bidding.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<section class="products-section" id="products">
+    <div class="container">
+
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">RootLine products</span>
+                <h2>Latest Listings</h2>
+            </div>
+        </div>
+
+        <div class="product-grid">
+
+            {% for product in products %}
+
+                <article class="product-card">
+
+                    <a href="{% url 'product_detail' product.id %}">
+                        <img
+                            src="{{ product.image_1.url }}"
+                            alt="{{ product.title }}"
+                            class="product-image"
+                        >
+                    </a>
+
+                    <div class="product-content">
+
+                        <div class="product-top-row">
+                            <span class="category-badge">
+                                {{ product.category.name }}
+                            </span>
+
+                            <span class="sale-badge">
+                                {{ product.get_sale_type_display }}
+                            </span>
+                        </div>
+
+                        <h3>
+                            <a href="{% url 'product_detail' product.id %}">
+                                {{ product.title }}
+                            </a>
+                        </h3>
+
+                        <p class="product-caption">
+                            {{ product.caption|default:product.description|truncatechars:90 }}
+                        </p>
+
+                        <p class="seller-name">
+                            Seller: {{ product.seller.username }}
+                        </p>
+
+                        {% if product.sale_type == "fixed" %}
+
+                            <div class="product-price">
+                                ৳{{ product.price }}
+                            </div>
+
+                        {% else %}
+
+                            <div class="product-price">
+                                Current bid:
+                                ৳{{ product.current_bid }}
+                            </div>
+
+                        {% endif %}
+
+                        <a
+                            href="{% url 'product_detail' product.id %}"
+                            class="card-button"
+                        >
+                            View Product
+                        </a>
+
+                    </div>
+                </article>
+
+            {% empty %}
+
+                <div class="empty-state">
+                    <h3>No products listed yet</h3>
+                    <p>
+                        Products created by approved sellers
+                        will appear here.
+                    </p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
