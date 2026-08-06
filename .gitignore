@@ -20,3 +20,8 @@ media/
 
 # VS Code
 .vscode/
+
+.venv/
+__pycache__/
+*.pyc
+.DS_Store

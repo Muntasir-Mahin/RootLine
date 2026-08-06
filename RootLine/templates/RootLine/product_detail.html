@@ -95,7 +95,13 @@
                         Available stock: {{ product.stock }}
                     </p>
 
-                    {% if user.is_authenticated %}
+                    {% if not product.is_active or product.stock < 1 %}
+
+                        <p class="notice">
+                            This product is out of stock.
+                        </p>
+
+                    {% elif user.is_authenticated %}
 
                         {% if user != product.seller %}
                             <form

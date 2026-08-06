@@ -63,7 +63,6 @@ def product_detail(request, product_id):
             "category",
         ),
         id=product_id,
-        is_active=True,
     )
 
     bids = product.bids.select_related("bidder")[:10]

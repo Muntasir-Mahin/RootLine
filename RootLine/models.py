@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 
@@ -74,6 +75,7 @@ class Product(models.Model):
         decimal_places=2,
         null=True,
         blank=True,
+        validators=[MinValueValidator(Decimal("0.01"))],
     )
 
     stock = models.PositiveIntegerField(default=1)
@@ -84,12 +86,14 @@ class Product(models.Model):
         decimal_places=2,
         null=True,
         blank=True,
+        validators=[MinValueValidator(Decimal("0.01"))],
     )
 
     minimum_bid_increment = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=Decimal("10.00"),
+        validators=[MinValueValidator(Decimal("0.01"))],
     )
 
     auction_end = models.DateTimeField(
@@ -142,11 +146,7 @@ class Product(models.Model):
                     "A bidding product must have an ending date and time."
                 )
 
-            if (
-                self._state.adding
-                and self.auction_end
-                and self.auction_end <= timezone.now()
-            ):
+            if self.auction_end and self.auction_end <= timezone.now():
                 errors["auction_end"] = (
                     "The auction ending time must be in the future."
                 )
