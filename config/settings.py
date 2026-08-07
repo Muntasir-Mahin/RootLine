@@ -17,11 +17,11 @@ import os
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key")
 
 DEBUG = False
-
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     ".vercel.app",
+    "root-line-fg727gvxk-muntasir-mahins-projects.vercel.app",
 ]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
