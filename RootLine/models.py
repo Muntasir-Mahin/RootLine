@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -9,7 +9,7 @@ from django.utils import timezone
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="profile",
     )
@@ -48,7 +48,7 @@ class Product(models.Model):
     ]
 
     seller = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="products",
     )
@@ -199,7 +199,7 @@ class Bid(models.Model):
     )
 
     bidder = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="bids",
     )
@@ -234,7 +234,7 @@ class Order(models.Model):
     ]
 
     buyer = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="orders",
     )

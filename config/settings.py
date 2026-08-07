@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "RootLine.apps.RootlineConfig",
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
+AUTH_USER_MODEL = "accounts.Account"
 
 TEMPLATES = [
     {
@@ -118,6 +120,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+#media files configuration
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 

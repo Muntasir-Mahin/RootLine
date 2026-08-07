@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from accounts.models import Account
 
 from .models import Bid, Product, Profile
 
@@ -9,7 +9,7 @@ class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
     class Meta:
-        model = User
+        model = Account
         fields = [
             "username",
             "email",
@@ -22,7 +22,7 @@ class RegisterForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data["email"]
 
-        if User.objects.filter(email__iexact=email).exists():
+        if Account.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError(
                 "An account with this email already exists."
             )
